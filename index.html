@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kuis Komputer Dasar</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
+    h2 { color: #2c3e50; }
+    .soal { margin-bottom: 20px; }
+    .soal p { margin: 5px 0; }
+    button { padding: 10px 15px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+  <h2>Kuis Komputer Dasar (10 Soal Pilihan Ganda)</h2>
+
+  <form id="quizForm">
+    <div class="soal">
+      <p>1. Apa fungsi utama CPU dalam komputer?</p>
+      <input type="radio" name="q1" value="B">B. Menjalankan perintah dan proses data<br>
+      <input type="radio" name="q1" value="A">A. Menyimpan data<br>
+      <input type="radio" name="q1" value="C">C. Menampilkan gambar<br>
+      <input type="radio" name="q1" value="D">D. Mencetak dokumen
+    </div>
+
+    <div class="soal">
+      <p>2. Yang termasuk perangkat output adalah...</p>
+      <input type="radio" name="q2" value="C">C. Monitor<br>
+      <input type="radio" name="q2" value="A">A. Keyboard<br>
+      <input type="radio" name="q2" value="B">B. Mouse<br>
+      <input type="radio" name="q2" value="D">D. Scanner
+    </div>
+
+    <div class="soal">
+      <p>3. Penyimpanan utama yang digunakan saat komputer menyala disebut...</p>
+      <input type="radio" name="q3" value="C">C. RAM<br>
+      <input type="radio" name="q3" value="A">A. Hard disk<br>
+      <input type="radio" name="q3" value="B">B. Flashdisk<br>
+      <input type="radio" name="q3" value="D">D. ROM
+    </div>
+
+    <div class="soal">
+      <p>4. Contoh sistem operasi komputer adalah...</p>
+      <input type="radio" name="q4" value="C">C. Windows 10<br>
+      <input type="radio" name="q4" value="A">A. Microsoft Word<br>
+      <input type="radio" name="q4" value="B">B. Adobe Photoshop<br>
+      <input type="radio" name="q4" value="D">D. Google Chrome
+    </div>
+
+    <div class="soal">
+      <p>5. Alat untuk mengetikkan huruf dan angka disebut...</p>
+      <input type="radio" name="q5" value="C">C. Keyboard<br>
+      <input type="radio" name="q5" value="A">A. Monitor<br>
+      <input type="radio" name="q5" value="B">B. CPU<br>
+      <input type="radio" name="q5" value="D">D. Mouse
+    </div>
+
+    <div class="soal">
+      <p>6. Yang termasuk perangkat lunak aplikasi adalah...</p>
+      <input type="radio" name="q6" value="C">C. Microsoft Excel<br>
+      <input type="radio" name="q6" value="A">A. Windows<br>
+      <input type="radio" name="q6" value="B">B. Linux<br>
+      <input type="radio" name="q6" value="D">D. BIOS
+    </div>
+
+    <div class="soal">
+      <p>7. Fungsi mouse adalah...</p>
+      <input type="radio" name="q7" value="C">C. Mengontrol kursor di layar<br>
+      <input type="radio" name="q7" value="A">A. Menyimpan file<br>
+      <input type="radio" name="q7" value="B">B. Menjalankan sistem<br>
+      <input type="radio" name="q7" value="D">D. Menampilkan gambar
+    </div>
+
+    <div class="soal">
+      <p>8. File berekstensi .docx biasanya dibuka dengan...</p>
+      <input type="radio" name="q8" value="C">C. Word<br>
+      <input type="radio" name="q8" value="A">A. Paint<br>
+      <input type="radio" name="q8" value="B">B. Excel<br>
+      <input type="radio" name="q8" value="D">D. PowerPoint
+    </div>
+
+    <div class="soal">
+      <p>9. Di mana kita menyimpan file secara permanen di komputer?</p>
+      <input type="radio" name="q9" value="C">C. Hard disk<br>
+      <input type="radio" name="q9" value="A">A. RAM<br>
+      <input type="radio" name="q9" value="B">B. Cache<br>
+      <input type="radio" name="q9" value="D">D. CPU
+    </div>
+
+    <div class="soal">
+      <p>10. Apa kepanjangan dari USB?</p>
+      <input type="radio" name="q10" value="B">B. Universal Serial Bus<br>
+      <input type="radio" name="q10" value="A">A. Universal Storage Bus<br>
+      <input type="radio" name="q10" value="C">C. User Storage Backup<br>
+      <input type="radio" name="q10" value="D">D. United Serial Board
+    </div>
+
+    <button type="button" onclick="cekJawaban()">Lihat Skor</button>
+    <p id="hasil"></p>
+  </form>
+
+  <script>
+    function cekJawaban() {
+      const kunci = {
+        q1: "B", q2: "C", q3: "C", q4: "C", q5: "C",
+        q6: "C", q7: "C", q8: "C", q9: "C", q10: "B"
+      };
+      let skor = 0;
+      for (let i = 1; i <= 10; i++) {
+        const jawaban = document.querySelector(`input[name="q${i}"]:checked`);
+        if (jawaban && jawaban.value === kunci[`q${i}`]) {
+          skor++;
+        }
+      }
+      document.getElementById("hasil").innerText = `Skor Anda: ${skor} dari 10`;
+    }
+  </script>
+
+</body>
+</html>
