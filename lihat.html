@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPP Interaktif Informatika - Pendekatan Deep Learning</title>
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: Desain aplikasi ini menggunakan struktur Single Page Application (SPA) dengan navigasi vertikal yang mengalir. Strukturnya tidak meniru urutan RPP, melainkan mengelompokkan informasi secara logis untuk pemahaman yang cepat dan mendalam. Dimulai dengan ringkasan (Dashboard), lalu filosofi inti (Prinsip Pembelajaran), diikuti oleh alur pengalaman belajar yang dibuat interaktif (Alur Pembelajaran), visualisasi alokasi waktu (Grafik), dan diakhiri dengan detail teknis seperti strategi asesmen dan kerangka kerja. Struktur ini dipilih karena memungkinkan pengguna untuk memahami 'gambaran besar' terlebih dahulu sebelum menyelami detail, yang sangat sesuai dengan prinsip pembelajaran bermakna. Interaksi utama berupa 'klik untuk melihat detail' pada alur pembelajaran dan asesmen, mencegah kepadatan informasi dan memberikan kontrol kepada pengguna. -->
+    <!-- Visualization & Content Choices: 1. RPP Info (Profil Lulusan) -> Goal: Inform -> Viz: Kartu Ikon -> Justification: Memberikan ringkasan cepat dan visual tentang kompetensi utama yang dituju. 2. RPP Info (Alur Pembelajaran: Awal, Inti, Penutup) -> Goal: Organize/Explain Process -> Viz: Timeline/Proses Flow (HTML/CSS) -> Interaction: Klik untuk membuka detail aktivitas pada setiap fase. -> Justification: Mengubah teks naratif menjadi alur visual yang mudah diikuti, menyoroti struktur 3 tahap pembelajaran (Memahami, Mengaplikasikan, Merefleksikan). 3. RPP Info (Alokasi Waktu per Fase) -> Goal: Compare/Inform -> Viz: Bar Chart (Chart.js/Canvas) -> Justification: Memberikan visualisasi data yang kuat tentang fokus waktu pembelajaran, menunjukkan fase 'Mengaplikasikan' sebagai inti dari model PBL. 4. RPP Info (Strategi Asesmen) -> Goal: Organize -> Viz: Accordion (HTML/JS) -> Interaction: Klik untuk membuka setiap jenis asesmen. -> Justification: Menyajikan informasi asesmen yang padat secara terstruktur dan rapi. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 100%;
+            max-width: 800px;
+            max-height: 400px;
+        }
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1e3a8a; /* blue-800 */
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #4b5563; /* gray-600 */
+            margin-top: -0.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+
+    <!-- Header & Navigasi -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-blue-800">RPP Interaktif</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#ringkasan" class="text-gray-600 hover:bg-blue-100 hover:text-blue-800 px-3 py-2 rounded-md text-sm font-medium">Ringkasan</a>
+                        <a href="#filosofi" class="text-gray-600 hover:bg-blue-100 hover:text-blue-800 px-3 py-2 rounded-md text-sm font-medium">Filosofi</a>
+                        <a href="#alur" class="text-gray-600 hover:bg-blue-100 hover:text-blue-800 px-3 py-2 rounded-md text-sm font-medium">Alur Belajar</a>
+                        <a href="#asesmen" class="text-gray-600 hover:bg-blue-100 hover:text-blue-800 px-3 py-2 rounded-md text-sm font-medium">Asesmen</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Section Hero -->
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-900 leading-tight">Rencana Pelaksanaan Pembelajaran Informatika</h1>
+            <p class="mt-4 text-xl text-gray-600">Pendekatan Deep Learning untuk Siswa Kelas VII</p>
+            <div class="mt-6 text-sm text-gray-500">
+                <span>Oleh: Rhakso Purnomo, S.Pd.,S.Kom</span> | <span>SMPN 6 Langsa</span>
+            </div>
+        </section>
+
+        <!-- Section Ringkasan & Target -->
+        <section id="ringkasan" class="py-12">
+            <h2 class="section-title">Ringkasan Pembelajaran</h2>
+            <p class="section-subtitle">Gambaran umum mengenai target, fokus, dan kerangka pembelajaran yang akan dilaksanakan.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card">
+                    <h3 class="font-bold text-lg text-blue-800 mb-2">Target Peserta Didik</h3>
+                    <p>Fase D, Kelas VII (Usia 13 Tahun) di daerah pedesaan yang mayoritas belum memahami konsep bilangan desimal secara mendalam.</p>
+                </div>
+                <div class="card">
+                    <h3 class="font-bold text-lg text-blue-800 mb-2">Topik Kontekstual</h3>
+                    <p class="font-semibold">"Jadi Konsumen Cerdas"</p>
+                    <p>Membandingkan harga barang menggunakan bilangan desimal dalam skenario belanja sehari-hari.</p>
+                </div>
+                 <div class="card">
+                    <h3 class="font-bold text-lg text-blue-800 mb-2">Waktu & Model</h3>
+                     <p><span class="font-semibold">Durasi:</span> 3 JP (120 Menit)</p>
+                     <p><span class="font-semibold">Model:</span> Problem-Based Learning (PBL)</p>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold text-center text-blue-800 mb-4">Dimensi Profil Pelajar Pancasila</h3>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="card p-6">
+                        <span class="text-4xl">🤔</span>
+                        <h4 class="font-bold text-lg mt-2">Bernalar Kritis</h4>
+                        <p class="text-sm text-gray-600 mt-1">Menganalisis informasi harga & kuantitas untuk mengambil keputusan.</p>
+                    </div>
+                     <div class="card p-6">
+                        <span class="text-4xl">💪</span>
+                        <h4 class="font-bold text-lg mt-2">Kemandirian</h4>
+                        <p class="text-sm text-gray-600 mt-1">Mengelola proses belajar & merefleksikan solusi secara individu.</p>
+                    </div>
+                     <div class="card p-6">
+                        <span class="text-4xl">🤝</span>
+                        <h4 class="font-bold text-lg mt-2">Kolaborasi</h4>
+                        <p class="text-sm text-gray-600 mt-1">Bekerja sama dalam kelompok untuk memecahkan masalah.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Filosofi -->
+        <section id="filosofi" class="py-12 bg-blue-50 rounded-xl">
+            <h2 class="section-title">Filosofi Deep Learning</h2>
+            <p class="section-subtitle">Pembelajaran ini dirancang berdasarkan tiga pilar utama untuk menciptakan pemahaman yang mendalam dan bertahan lama.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="p-4">
+                    <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-lg">
+                        <span class="text-4xl">🧘</span>
+                    </div>
+                    <h3 class="font-bold text-xl mt-4">Mindful Learning</h3>
+                    <p class="mt-2 text-gray-600">Mendorong siswa aktif berdiskusi, bereksperimen, dan memperhatikan potensi individu.</p>
+                </div>
+                <div class="p-4">
+                     <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-lg">
+                        <span class="text-4xl">💡</span>
+                    </div>
+                    <h3 class="font-bold text-xl mt-4">Meaningful Learning</h3>
+                    <p class="mt-2 text-gray-600">Mengajak siswa memahami 'mengapa' di balik setiap materi, menghubungkannya dengan kehidupan nyata.</p>
+                </div>
+                <div class="p-4">
+                     <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-lg">
+                        <span class="text-4xl">🎉</span>
+                    </div>
+                    <h3 class="font-bold text-xl mt-4">Joyful Learning</h3>
+                    <p class="mt-2 text-gray-600">Menciptakan pengalaman belajar yang menyenangkan melalui kepuasan dari pemahaman mendalam.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Alur Pembelajaran -->
+        <section id="alur" class="py-12">
+            <h2 class="section-title">Alur Pengalaman Belajar</h2>
+            <p class="section-subtitle">Sebuah perjalanan terstruktur yang membawa siswa dari pemahaman konsep hingga aplikasi dan refleksi nyata. Klik pada setiap tahap inti untuk melihat detailnya.</p>
+            <div class="relative">
+                <!-- Garis Timeline -->
+                <div class="absolute left-1/2 h-full w-0.5 bg-blue-200 -translate-x-1/2"></div>
+                
+                <!-- Item: Awal -->
+                <div class="relative mb-8">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-800 text-white mx-auto z-10 relative">1</div>
+                    <div class="text-center mt-2">
+                        <h3 class="font-bold text-xl text-blue-800">AWAL (15 Menit)</h3>
+                        <p class="text-gray-600">Orientasi, Apersepsi & Motivasi</p>
+                    </div>
+                </div>
+
+                <!-- Item: Inti -->
+                <div class="relative mb-8">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-800 text-white mx-auto z-10 relative">2</div>
+                    <div class="text-center mt-2">
+                        <h3 class="font-bold text-xl text-blue-800">INTI (90 Menit)</h3>
+                        <p class="text-gray-600">Memahami, Mengaplikasikan, Merefleksikan</p>
+                    </div>
+                    <!-- Detail Inti -->
+                    <div class="mt-6 max-w-4xl mx-auto grid md:grid-cols-3 gap-4">
+                        <button data-target="detail-memahami" class="interactive-tab bg-white p-4 rounded-lg shadow text-center cursor-pointer hover:bg-blue-100 transition">
+                            <h4 class="font-bold text-blue-700">1. Memahami</h4>
+                            <p class="text-sm text-gray-500">Konstruksi Pengetahuan</p>
+                        </button>
+                         <button data-target="detail-mengaplikasikan" class="interactive-tab bg-white p-4 rounded-lg shadow text-center cursor-pointer hover:bg-blue-100 transition">
+                            <h4 class="font-bold text-blue-700">2. Mengaplikasikan</h4>
+                            <p class="text-sm text-gray-500">Penerapan Kontekstual</p>
+                        </button>
+                         <button data-target="detail-merefleksikan" class="interactive-tab bg-white p-4 rounded-lg shadow text-center cursor-pointer hover:bg-blue-100 transition">
+                            <h4 class="font-bold text-blue-700">3. Merefleksikan</h4>
+                            <p class="text-sm text-gray-500">Evaluasi & Pemaknaan</p>
+                        </button>
+                    </div>
+                    <div id="detail-container" class="mt-4">
+                        <div id="detail-memahami" class="detail-content card hidden">
+                            <h4 class="font-bold text-lg mb-2">Tahap Memahami (25 Menit)</h4>
+                            <p class="mb-2"><strong class="text-blue-700">Aktivitas:</strong> Diskusi kelas membangun konsep desimal melalui analogi dan contoh nyata.</p>
+                            <p class="font-semibold">Pertanyaan Pemantik:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600">
+                                <li>Jika tali panjangnya 1,7 meter, apa artinya angka '7'?</li>
+                                <li>Mengapa harga bensin ditulis sangat detail?</li>
+                            </ul>
+                        </div>
+                        <div id="detail-mengaplikasikan" class="detail-content card hidden">
+                            <h4 class="font-bold text-lg mb-2">Tahap Mengaplikasikan (40 Menit)</h4>
+                             <p class="mb-2"><strong class="text-blue-700">Aktivitas:</strong> Kerja kelompok memecahkan studi kasus "Misi Belanja Cerdas" di kantin dengan anggaran terbatas.</p>
+                            <p class="font-semibold">Pertanyaan Pemantik:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600">
+                                <li>Strategi apa yang kelompokmu gunakan? Memilih yang paling murah atau paling banyak isinya?</li>
+                                <li>Bagaimana kalian membuktikan pilihan kalian lebih baik?</li>
+                            </ul>
+                        </div>
+                        <div id="detail-merefleksikan" class="detail-content card hidden">
+                            <h4 class="font-bold text-lg mb-2">Tahap Merefleksikan (25 Menit)</h4>
+                             <p class="mb-2"><strong class="text-blue-700">Aktivitas:</strong> Presentasi hasil kerja kelompok, diskusi, dan refleksi individu terhadap proses pembelajaran.</p>
+                            <p class="font-semibold">Pertanyaan Pemantik:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600">
+                                <li>Setelah melihat presentasi teman, adakah strategi lain yang lebih efektif?</li>
+                                <li>Bagaimana pengetahuan ini akan mengubah caramu melihat harga barang?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item: Penutup -->
+                <div class="relative">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-800 text-white mx-auto z-10 relative">3</div>
+                     <div class="text-center mt-2">
+                        <h3 class="font-bold text-xl text-blue-800">PENUTUP (15 Menit)</h3>
+                        <p class="text-gray-600">Umpan Balik, Kesimpulan & Apresiasi</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Grafik -->
+        <section id="grafik" class="py-12">
+             <h2 class="section-title">Visualisasi Alokasi Waktu</h2>
+             <p class="section-subtitle">Distribusi waktu pembelajaran menunjukkan penekanan pada fase aplikasi, yang merupakan jantung dari model Pembelajaran Berbasis Masalah (PBL).</p>
+             <div class="chart-container">
+                <canvas id="timeAllocationChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Section Asesmen -->
+        <section id="asesmen" class="py-12">
+            <h2 class="section-title">Strategi Asesmen</h2>
+            <p class="section-subtitle">Penilaian dilakukan secara komprehensif pada tiga tahap: sebelum, selama, dan sesudah pembelajaran untuk mengukur pemahaman siswa secara holistik.</p>
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="accordion-item">
+                    <button class="accordion-header flex justify-between items-center w-full text-left p-4 bg-white rounded-lg shadow font-bold text-blue-800 hover:bg-blue-50">
+                        <span>Asesmen Awal (Diagnostik)</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 bg-white rounded-b-lg">
+                        <p>3 soal esai singkat untuk mengukur pemahaman awal:</p>
+                        <ol class="list-decimal list-inside mt-2 text-gray-600">
+                            <li>Mengurutkan bilangan desimal.</li>
+                            <li>Menjumlahkan bilangan desimal.</li>
+                            <li>Mengartikan bilangan desimal dalam konteks (jarak).</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header flex justify-between items-center w-full text-left p-4 bg-white rounded-lg shadow font-bold text-blue-800 hover:bg-blue-50">
+                        <span>Asesmen Proses (Formatif)</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 bg-white rounded-b-lg">
+                       <p>Menggunakan format catatan anekdotal untuk mengobservasi perkembangan dimensi Profil Pelajar Pancasila selama diskusi dan kerja kelompok (Bernalar Kritis, Kemandirian, Kolaborasi).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header flex justify-between items-center w-full text-left p-4 bg-white rounded-lg shadow font-bold text-blue-800 hover:bg-blue-50">
+                        <span>Asesmen Akhir (Sumatif)</span>
+                         <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 bg-white rounded-b-lg overflow-x-auto">
+                        <p class="mb-2">Menggunakan rubrik penilaian untuk mengukur kemampuan siswa berdasarkan 4 indikator dengan skala MB, SB, BSH, SAB.</p>
+                         <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Indikator Penilaian</th>
+                                    <th scope="col" class="px-6 py-3">Deskripsi Singkat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium">Mengidentifikasi & Membaca Nilai Desimal</td>
+                                    <td class="px-6 py-4">Kemampuan membaca dan mengartikan nilai desimal.</td>
+                                </tr>
+                                <tr class="bg-gray-50 border-b">
+                                    <td class="px-6 py-4 font-medium">Membandingkan Nilai Desimal</td>
+                                    <td class="px-6 py-4">Kemampuan membandingkan nilai untuk mengambil keputusan.</td>
+                                </tr>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium">Menerapkan Perhitungan Desimal</td>
+                                    <td class="px-6 py-4">Kemampuan menggunakan operasi hitung untuk memecahkan masalah.</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-6 py-4 font-medium">Memberikan Alasan/Justifikasi</td>
+                                    <td class="px-6 py-4">Kemampuan memberikan alasan logis berdasarkan data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-blue-900 text-white mt-12">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>&copy; 2025 - RPP Interaktif oleh Rhakso Purnomo, S.Pd.,S.Kom</p>
+            <p class="text-sm text-blue-200 mt-1">Dibuat untuk SMPN 6 Langsa</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Navigasi Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Interaksi Alur Pembelajaran
+    const tabs = document.querySelectorAll('.interactive-tab');
+    const contents = document.querySelectorAll('.detail-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetId = tab.dataset.target;
+            const targetContent = document.getElementById(targetId);
+
+            // Sembunyikan semua konten detail
+            contents.forEach(content => {
+                if (content.id !== targetId) {
+                    content.classList.add('hidden');
+                }
+            });
+            
+            // Toggle target konten
+            targetContent.classList.toggle('hidden');
+        });
+    });
+    
+    // Interaksi Accordion Asesmen
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('span:last-child');
+            
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+    });
+
+    // Chart.js: Alokasi Waktu
+    const ctx = document.getElementById('timeAllocationChart').getContext('2d');
+    const timeAllocationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Pembukaan', 'Memahami', 'Mengaplikasikan', 'Merefleksikan', 'Penutup'],
+            datasets: [{
+                label: 'Alokasi Waktu (Menit)',
+                data: [15, 25, 40, 25, 15],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(34, 197, 94, 0.7)',
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(249, 115, 22, 0.7)',
+                    'rgba(168, 85, 247, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(249, 115, 22, 1)',
+                    'rgba(168, 85, 247, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` ${context.raw} Menit`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Durasi (Menit)'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
